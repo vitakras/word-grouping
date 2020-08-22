@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 from flask_cors import CORS, cross_origin
 
 import word_group
@@ -12,10 +12,16 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 
 word_group_storage = word_group.load_word_group('names.csv')
 
+
 # Define the index route
 @app.route("/")
+@app.route("/folder/<name>", methods=['POST'])
 @cross_origin()
-def index():
+def index(name=None):
+    if request.method == 'POST':
+        if name not in word_group_storage:
+            word_group_storage[name] = []
+
     return word_group_storage
 
 

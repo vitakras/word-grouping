@@ -1,4 +1,5 @@
 import React, { Fragment } from "react";
+import { useRecoilValue } from "recoil";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -10,6 +11,8 @@ import FolderOpenIcon from "@material-ui/icons/FolderOpen";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import DescriptionIcon from "@material-ui/icons/Description";
+
+import { wordGroupFoldersState } from "../state/atoms";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -59,6 +62,11 @@ export const Folder = ({ name, items = [] }) => {
 
 export default function WordGroupList() {
   const classes = useStyles();
+  const workGroupFolders = useRecoilValue(wordGroupFoldersState);
+
+  const folder = Object.keys(workGroupFolders).map((key) => (
+    <Folder key={key} name={key} items={workGroupFolders[key]} />
+  ));
 
   return (
     <List
@@ -66,9 +74,7 @@ export default function WordGroupList() {
       aria-labelledby="nested-list-subheader"
       className={classes.root}
     >
-      <Folder name="hello" items={['hello world']} />
-      <Folder name="hello" />
-      <Folder name="hello" />
+      {folder}
     </List>
   );
 }

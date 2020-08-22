@@ -1,13 +1,5 @@
 import csv
 
-
-def load_words(file_name):
-    with open(file_name) as file:
-        reader = csv.reader(file)
-        return [row[0] for row in reader]
-    return []
-
-
 def word_group(words):
     """
     Takes a list of words and returns a list of words grouped by prefix
@@ -35,11 +27,8 @@ def word_group(words):
     return group
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    words = load_words('names.csv')
-    grouped = word_group(words)
-
-    for key in grouped:
-        print(key, grouped[key])
-
+def load_word_group(file_name):
+    with open(file_name) as file:
+        reader = csv.reader(file)
+        return word_group([row[0] for row in reader])
+    return {}

@@ -1,10 +1,10 @@
 import React from "react";
 import { RecoilRoot } from "recoil";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 
 import { Header } from "./components/header";
 import { Notification } from "./components/notification";
-import { ListWordGroupScreen } from "./screens/list-word-group";
+import { Routes } from "./routes";
 
 function App() {
   return (
@@ -13,11 +13,7 @@ function App() {
         <React.Suspense fallback={<div>Loading...</div>}>
           <Router>
             <Header />
-            <Switch>
-              <Route path="/" >
-                <ListWordGroupScreen />
-              </Route>
-            </Switch>
+            <Routes />
           </Router>
           <Notification />
         </React.Suspense>

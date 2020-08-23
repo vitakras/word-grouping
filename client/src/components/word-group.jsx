@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { makeStyles } from "@material-ui/core/styles";
+import { useHistory } from "react-router-dom";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -12,7 +13,7 @@ import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import DescriptionIcon from "@material-ui/icons/Description";
 
-import { wordGroupFoldersState } from "../state/atoms";
+import { wordGroupFoldersState, selectedNameState } from "../state/atoms";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,19 +29,37 @@ const useStyles = makeStyles((theme) => ({
 export const Folder = ({ name, items = [] }) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
+  const setSelectedName = useSetRecoilState(selectedNameState);
+  const history = useHistory();
 
   const handleClick = () => {
     setOpen(!open);
   };
 
-  const FolderItems = items.map((item) => (
-    <ListItem key={item} button className={classes.nested}>
-      <ListItemIcon>
-        <DescriptionIcon />
-      </ListItemIcon>
-      <ListItemText primary={item} />
-    </ListItem>
-  ));
+  const FolderItems = items.map((item) => {
+    // This is probably a code smell and will be harder to test
+    const moveFolderItem = () => {
+      setSelectedName({
+        name: item,
+        folderName: name,
+      });
+      history.push(`/move/${item}`);
+    };
+
+    return (
+      <ListItem
+        key={item}
+        button
+        className={classes.nested}
+        onClick={moveFolderItem}
+      >
+        <ListItemIcon>
+          <DescriptionIcon />
+        </ListItemIcon>
+        <ListItemText primary={item} />
+      </ListItem>
+    );
+  });
 
   return (
     <Fragment>
